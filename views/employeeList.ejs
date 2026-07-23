@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employees · TaskApp</title>
+  <%- include('partials/style') %>
+</head>
+<body>
+  <%- include('navbar') %>
+  <div class="container">
+    <h2>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Manage Employees
+    </h2>
+
+    <div class="card">
+      <h3 style="margin-top:0;">Create New Employee</h3>
+      <% if (error) { %>
+        <div class="error-box">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <%= error %>
+        </div>
+      <% } %>
+      <form method="POST" action="/admin/employees">
+        <label>Username</label>
+        <input name="username" placeholder="e.g. rahul.sharma" required/>
+        <label>Password</label>
+        <input name="password" type="password" placeholder="Set a password" required/>
+        <button type="submit" class="btn-block">Create Employee</button>
+      </form>
+    </div>
+
+    <h3>Existing Accounts</h3>
+    <% employees.forEach(emp => { %>
+      <div class="card row">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <%= emp.username %>
+          <span class="badge badge-role"><%= emp.role %></span>
+        </div>
+        <% if (emp.role !== 'admin') { %>
+          <form method="POST" action="/admin/employees/<%= emp._id %>/delete" style="margin:0;">
+            <button type="submit" class="btn-danger">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            </button>
+          </form>
+        <% } %>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>
